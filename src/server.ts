@@ -193,6 +193,11 @@ export class FigmaMcpServer {
   async startHttpServer(port: number): Promise<void> {
     const app = express();
 
+    // Add health check endpoint
+    app.get("/health", (req: Request, res: Response) => {
+      res.status(200).json({ status: "ok" });
+    });
+
     app.get("/sse", async (req: Request, res: Response) => {
       console.log("New SSE connection established");
       this.sseTransport = new SSEServerTransport(
@@ -216,10 +221,11 @@ export class FigmaMcpServer {
     Logger.log = console.log;
     Logger.error = console.error;
 
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
       Logger.log(`HTTP server listening on port ${port}`);
-      Logger.log(`SSE endpoint available at http://localhost:${port}/sse`);
-      Logger.log(`Message endpoint available at http://localhost:${port}/messages`);
+      Logger.log(`SSE endpoint available at http://0.0.0.0:${port}/sse`);
+      Logger.log(`Message endpoint available at http://0.0.0.0:${port}/messages`);
+      Logger.log(`Health check endpoint available at http://0.0.0.0:${port}/health`);
     });
   }
 }
