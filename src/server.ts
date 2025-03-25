@@ -216,7 +216,7 @@ export class FigmaMcpServer {
     Logger.log = console.log;
     Logger.error = console.error;
 
-    app.listen(port, process.env.HOST || 'localhost', () => {
+    app.listen(port, "0.0.0.0", () => {
       Logger.log(`HTTP server listening on port ${port}`);
       Logger.log(`SSE endpoint available at http://localhost:${port}/sse`);
       Logger.log(`Message endpoint available at http://localhost:${port}/messages`);
